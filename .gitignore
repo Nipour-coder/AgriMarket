@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment Files (Do not commit secrets)
+.env
+.env*.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env*
+!backend/.env.example
+frontend/.env*
+!frontend/.env.example
+
+# Next.js Build Output
+.next/
+frontend/.next/
+out/
+build/
+dist/
+
+# TypeScript Build Info
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE and Editor Files
+.idea/
+.vscode/*
+!.vscode/launch.json
+!.vscode/tasks.json
+*.iml
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+
+# Android / Gradle artifacts (if any)
+.gradle/
+local.properties
+/captures/
+.externalNativeBuild/
+.cxx/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log

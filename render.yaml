@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: agrimarket
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build --workspace frontend
+    startCommand: cd frontend && npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: DATABASE_URL
+        sync: false
+      - key: APP_URL
+        sync: false

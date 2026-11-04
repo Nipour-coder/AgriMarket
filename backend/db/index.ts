@@ -7,7 +7,11 @@ import * as schema from './schema';
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 const backendDir = path.resolve(currentDir, '..');
-loadEnvConfig(backendDir);
+try {
+  loadEnvConfig(backendDir);
+} catch {
+  // Ignore in hosted cloud environments
+}
 
 const globalForDb = globalThis as typeof globalThis & {
   agrimarketSql?: ReturnType<typeof postgres>;
@@ -17,7 +21,11 @@ const globalForDb = globalThis as typeof globalThis & {
 export function getDb() {
   let connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
-    loadEnvConfig(backendDir);
+    try {
+  loadEnvConfig(backendDir);
+} catch {
+  // Ignore in hosted cloud environments
+}
     connectionString = process.env.DATABASE_URL;
   }
 

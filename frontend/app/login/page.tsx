@@ -232,6 +232,12 @@ function LoginFormContent() {
                 <label className="block text-xs font-semibold text-stone-700">
                   Password
                 </label>
+                <NextLink
+                  href="/forgot-password"
+                  className="text-xs font-semibold text-[#5b9632] hover:text-[#416c23] hover:underline transition-colors"
+                >
+                  Forgot password?
+                </NextLink>
               </div>
               <div className="relative">
                 <Lock className="w-4 h-4 text-stone-400 absolute left-3.5 top-3" />

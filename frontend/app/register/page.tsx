@@ -332,8 +332,14 @@ function RegisterForm() {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-xs leading-5 text-amber-950">
-                    Secure KYC document uploads are not enabled yet. You can submit your business profile now and provide documents when secure storage is configured.
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 text-xs leading-5 text-emerald-950 flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-bold text-emerald-900 block mb-0.5">KYC Document Uploads &amp; Verification Active</span>
+                      <span>
+                        Submit your business profile below to register your seller account. You can immediately upload your statutory documents (CIPC Certificate, Proof of Address, Director ID, and Tax Clearance) in your Seller Verification Center to receive an official verified badge.
+                      </span>
+                    </div>
                   </div>
                 </div>
               ) : (

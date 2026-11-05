@@ -647,19 +647,65 @@ export default function AdminVerificationsPage() {
               </button>
             </div>
 
-            {/* Simulated Document Viewer Canvas */}
-            <div className="my-6 rounded-2xl border border-dashed border-stone-300 bg-stone-50 p-8 text-center">
-              <FileCheck2 size={48} className="mx-auto text-emerald-700 mb-3" />
-              <p className="text-sm font-bold text-stone-800">CIPC & Statutory Accreditation Document Preview</p>
-              <p className="mt-1 text-xs text-stone-500 max-w-md mx-auto">
-                File: <strong>{selectedDoc.fileName}</strong> uploaded on {selectedDoc.uploadedAt}. Cryptographic checksum valid; company registration number matches statutory records.
-              </p>
-              <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
-                <CheckCircle2 size={14} /> Document Verified Legible
-              </div>
+            {/* Document Viewer Canvas */}
+            <div className="my-6 rounded-2xl border border-dashed border-stone-300 bg-stone-50 p-6 text-center">
+              {selectedDoc.fileUrl && /\.(jpg|jpeg|png|webp)$/i.test(selectedDoc.fileUrl) ? (
+                <div className="space-y-3">
+                  <div className="max-h-72 overflow-hidden rounded-xl border border-stone-200 bg-white flex items-center justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={selectedDoc.fileUrl}
+                      alt={selectedDoc.name}
+                      className="max-h-72 w-auto object-contain"
+                    />
+                  </div>
+                  <div className="flex items-center justify-center gap-2">
+                    <a
+                      href={selectedDoc.fileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-100 hover:bg-emerald-200 px-3 py-1.5 rounded-xl transition"
+                    >
+                      <ExternalLink size={13} /> View Full Resolution
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <FileCheck2 size={48} className="mx-auto text-emerald-700 mb-3" />
+                  <p className="text-sm font-bold text-stone-800">{selectedDoc.name}</p>
+                  <p className="mt-1 text-xs text-stone-500 max-w-md mx-auto">
+                    File: <strong>{selectedDoc.fileName}</strong> ({selectedDoc.fileSize}) · Uploaded on {selectedDoc.uploadedAt}.
+                  </p>
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                    <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
+                      <CheckCircle2 size={14} /> Document Verified Legible
+                    </div>
+                    {selectedDoc.fileUrl && (
+                      <a
+                        href={selectedDoc.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-white border border-stone-300 hover:bg-stone-100 px-3 py-1 rounded-full transition"
+                      >
+                        <ExternalLink size={13} /> Open / Download File
+                      </a>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
 
-            <div className="flex justify-end gap-3 border-t border-stone-100 pt-4">
+            <div className="flex justify-between items-center border-t border-stone-100 pt-4">
+              {selectedDoc.fileUrl ? (
+                <a
+                  href={selectedDoc.fileUrl}
+                  download={selectedDoc.fileName}
+                  className="px-4 py-2 rounded-xl bg-stone-100 text-stone-700 text-xs font-bold hover:bg-stone-200 transition"
+                >
+                  Download Original
+                </a>
+              ) : <div />}
               <button
                 type="button"
                 onClick={() => setSelectedDoc(null)}

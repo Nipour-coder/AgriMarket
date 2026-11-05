@@ -1,15 +1,36 @@
 services:
   - type: web
-    name: agrimarket
+    name: agrimarket-backend
     runtime: node
     plan: free
     region: oregon
-    buildCommand: npm install && npm run build --workspace frontend
-    startCommand: cd frontend && npm start
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
     envVars:
       - key: NODE_VERSION
         value: 20.18.0
+      - key: PORT
+        value: 5000
       - key: DATABASE_URL
         sync: false
       - key: APP_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: ADMIN_EMAILS
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_REGION
+        sync: false
+      - key: S3_BUCKET
+        sync: false
+      - key: S3_ACCESS_KEY_ID
+        sync: false
+      - key: S3_SECRET_ACCESS_KEY
         sync: false

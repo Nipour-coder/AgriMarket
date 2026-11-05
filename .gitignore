@@ -49,3 +49,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 *.log
+
+# Uploads
+backend/uploads/products/*
+!backend/uploads/products/.gitkeep
+backend/uploads/documents/*
+!backend/uploads/documents/.gitkeep

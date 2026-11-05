@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { apiFetch } from '@/lib/apiFetch';
 
 type Enquiry = {
   id: string;
@@ -24,7 +25,7 @@ export default function SellerEnquiriesPage() {
 
   const loadEnquiries = useCallback(async () => {
     try {
-      const response = await fetch('/api/enquiries', { cache: 'no-store' });
+      const response = await apiFetch('/api/enquiries', { cache: 'no-store' });
       const result = await response.json() as Enquiry[] | { error?: string };
       if (!response.ok || !Array.isArray(result)) throw new Error('error' in result ? result.error : 'Unable to load enquiries.');
       setEnquiries(result);
@@ -48,7 +49,7 @@ export default function SellerEnquiriesPage() {
     setError('');
     setNotice('');
     try {
-      const response = await fetch(`/api/enquiries/${enquiry.id}/messages`, {
+      const response = await apiFetch(`/api/enquiries/${enquiry.id}/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message, quotePrice: quotes[enquiry.id] || undefined }),

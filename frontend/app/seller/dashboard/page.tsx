@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { apiFetch } from '@/lib/apiFetch';
 
 type Summary = {
   businessName: string;
@@ -22,11 +23,11 @@ export default function SellerDashboardPage() {
     const load = async () => {
       try {
         const [verificationResponse, productsResponse, ordersResponse, enquiriesResponse, notificationsResponse] = await Promise.all([
-          fetch('/api/seller/verification', { cache: 'no-store' }),
-          fetch('/api/seller/products', { cache: 'no-store' }),
-          fetch('/api/orders', { cache: 'no-store' }),
-          fetch('/api/enquiries', { cache: 'no-store' }),
-          fetch('/api/notifications', { cache: 'no-store' }),
+          apiFetch('/api/seller/verification', { cache: 'no-store' }),
+          apiFetch('/api/seller/products', { cache: 'no-store' }),
+          apiFetch('/api/orders', { cache: 'no-store' }),
+          apiFetch('/api/enquiries', { cache: 'no-store' }),
+          apiFetch('/api/notifications', { cache: 'no-store' }),
         ]);
         const [verification, products, orders, enquiries, userNotifications] = await Promise.all([
           verificationResponse.json(), productsResponse.json(), ordersResponse.json(), enquiriesResponse.json(), notificationsResponse.json(),

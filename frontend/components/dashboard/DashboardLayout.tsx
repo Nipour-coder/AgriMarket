@@ -3,6 +3,7 @@
 import React from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
+import { clearStoredToken } from '@/lib/apiFetch';
 import { 
   Sprout, 
   ShieldCheck, 
@@ -44,6 +45,12 @@ export default function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
   const router = useRouter();
+
+  const signOut = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' }).catch(() => {});
+    clearStoredToken();
+    router.push('/login');
+  };
 
   const roleConfig = {
     buyer: {
@@ -156,13 +163,14 @@ export default function DashboardLayout({
             >
               <span>Browse Products</span>
             </NextLink>
-            <NextLink
-              href="/login"
+            <button
+              type="button"
+              onClick={() => void signOut()}
               className="px-4 py-2 rounded-xl text-xs font-semibold border border-stone-200 text-stone-600 hover:text-red-700 hover:bg-red-50 transition-colors flex items-center gap-1.5"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Sign Out</span>
-            </NextLink>
+            </button>
           </div>
         </div>
 

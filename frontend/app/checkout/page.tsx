@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Check, CreditCard, MapPin, PackageCheck, Store, Truck } from 'lucide-react';
 import { MOCK_PRODUCTS, PROVINCES_LIST } from '@/data/mockData';
 import { useStore } from '@/lib/store';
+import { apiFetch } from '@/lib/apiFetch';
 
 const money = (amount: number) => new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR', maximumFractionDigits: 2 }).format(amount);
 const steps = ['Your details', 'Delivery address', 'Delivery method', 'Payment', 'Review'];
@@ -25,12 +26,12 @@ export default function CheckoutPage() {
   const items = useMemo(() => cart.map((line) => ({ ...line, product: line.product ?? MOCK_PRODUCTS.find((product) => product.id === line.productId) })).filter((line) => line.product), [cart]);
 
   useEffect(() => {
-    fetch('/api/auth/me', { cache: 'no-store' }).then(async (response) => {
+    apiFetch('/api/auth/me', { cache: 'no-store' }).then(async (response) => {
       if (!response.ok) throw new Error('Unable to load your account.');
       const result = await response.json() as { user?: { name: string; email: string; phone: string } | null };
       if (result.user) setCustomer(result.user);
     }).catch((issue: unknown) => console.error('Unable to load checkout account details', issue));
-    fetch('/api/addresses', { cache: 'no-store' }).then(async (response) => {
+    apiFetch('/api/addresses', { cache: 'no-store' }).then(async (response) => {
       if (!response.ok) return;
       const result = await response.json() as { recipientName: string; phone: string; province: string; city: string; suburb: string; street: string; postalCode: string; instructions: string; isDefault: boolean }[];
       const preferred = result.find((item) => item.isDefault) ?? result[0];
@@ -79,7 +80,7 @@ export default function CheckoutPage() {
 
     try {
       if (saveAddress) {
-        const addressResponse = await fetch('/api/addresses', {
+        const addressResponse = await apiFetch('/api/addresses', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

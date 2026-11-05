@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { apiFetch } from '@/lib/apiFetch';
 import { ArrowLeft, BadgeCheck, Check, MapPin, Minus, PackageCheck, Plus, ShoppingBasket, Truck } from 'lucide-react';
 import { PROVINCES_LIST } from '@/data/mockData';
 import { useStore } from '@/lib/store';
@@ -58,7 +59,7 @@ export default function ProductDetails({ productId }: { productId: string }) {
     const form = new FormData(event.currentTarget);
     setError('');
     try {
-      const response = await fetch('/api/enquiries', {
+      const response = await apiFetch('/api/enquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { apiFetch } from '@/lib/apiFetch';
 
 type Role = 'buyer' | 'seller' | 'admin';
 type OrderLine = { orderItemId: string; sellerId: string; productId: string; name: string; quantity: number };
@@ -86,7 +87,7 @@ export default function DisputesWorkspace({ role, initialOrderId = '' }: { role:
   const [notice, setNotice] = useState('');
 
   const loadDisputes = useCallback(async () => {
-    const response = await fetch(isAdmin ? '/api/admin/disputes' : '/api/disputes', { cache: 'no-store' });
+    const response = await apiFetch(isAdmin ? '/api/admin/disputes' : '/api/disputes', { cache: 'no-store' });
     if (!response.ok) throw await responseError(response, 'Unable to load complaints.');
     const result = await response.json() as DisputeSummary[];
     setDisputes(result);
@@ -100,7 +101,7 @@ export default function DisputesWorkspace({ role, initialOrderId = '' }: { role:
 
   const loadDetail = useCallback(async (id: string) => {
     if (!id) return;
-    const response = await fetch(`/api/disputes/${encodeURIComponent(id)}`, { cache: 'no-store' });
+    const response = await apiFetch(`/api/disputes/${encodeURIComponent(id)}`, { cache: 'no-store' });
     if (!response.ok) throw await responseError(response, 'Unable to load complaint details.');
     setDetail(await response.json() as DisputeDetail);
   }, []);
@@ -109,7 +110,7 @@ export default function DisputesWorkspace({ role, initialOrderId = '' }: { role:
     try {
       const nextId = await loadDisputes();
       if (!isAdmin) {
-        const response = await fetch('/api/orders', { cache: 'no-store' });
+        const response = await apiFetch('/api/orders', { cache: 'no-store' });
         if (!response.ok) throw await responseError(response, 'Unable to load orders.');
         setOrders(await response.json() as Order[]);
       }
@@ -144,7 +145,7 @@ export default function DisputesWorkspace({ role, initialOrderId = '' }: { role:
     setError('');
     setNotice('');
     try {
-      const response = await fetch('/api/disputes', {
+      const response = await apiFetch('/api/disputes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ orderId, orderItemId, category, description }),
@@ -172,7 +173,7 @@ export default function DisputesWorkspace({ role, initialOrderId = '' }: { role:
     setBusy(true);
     setError('');
     try {
-      const response = await fetch(`/api/disputes/${detail.id}/messages`, {
+      const response = await apiFetch(`/api/disputes/${detail.id}/messages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message }),
@@ -198,7 +199,7 @@ export default function DisputesWorkspace({ role, initialOrderId = '' }: { role:
     let pendingEvidenceId: string | null = null;
     try {
       for (const file of files) {
-        const prepare = await fetch(`/api/disputes/${detail.id}/evidence`, {
+        const prepare = await apiFetch(`/api/disputes/${detail.id}/evidence`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ fileName: file.name, contentType: file.type, sizeBytes: file.size }),
@@ -211,7 +212,7 @@ export default function DisputesWorkspace({ role, initialOrderId = '' }: { role:
         formData.append('file', file);
         const uploaded = await fetch(target.url, { method: 'POST', body: formData });
         if (!uploaded.ok) throw new Error(`Storage rejected ${file.name}. Check the bucket CORS policy and allowed file size.`);
-        const completed = await fetch(`/api/disputes/${detail.id}/evidence/${target.id}`, { method: 'POST' });
+        const completed = await apiFetch(`/api/disputes/${detail.id}/evidence/${target.id}`, { method: 'POST' });
         if (!completed.ok) throw await responseError(completed, `Unable to verify ${file.name} upload.`);
         pendingEvidenceId = null;
       }
@@ -219,7 +220,7 @@ export default function DisputesWorkspace({ role, initialOrderId = '' }: { role:
       await loadDetail(detail.id);
     } catch (issue) {
       if (pendingEvidenceId) {
-        await fetch(`/api/disputes/${detail.id}?evidenceId=${encodeURIComponent(pendingEvidenceId)}`, { method: 'DELETE' });
+        await apiFetch(`/api/disputes/${detail.id}?evidenceId=${encodeURIComponent(pendingEvidenceId)}`, { method: 'DELETE' });
       }
       setError(issue instanceof Error ? issue.message : 'Unable to upload evidence.');
     } finally {
@@ -233,7 +234,7 @@ export default function DisputesWorkspace({ role, initialOrderId = '' }: { role:
     setError('');
     setNotice('');
     try {
-      const response = await fetch(`/api/admin/disputes/${detail.id}`, {
+      const response = await apiFetch(`/api/admin/disputes/${detail.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { apiFetch } from '@/lib/apiFetch';
 
 type BuyerEnquiry = {
   id: string;
@@ -20,7 +21,7 @@ export default function BuyerEnquiriesPage() {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState('');
   useEffect(() => {
-    fetch('/api/enquiries', { cache: 'no-store' }).then(async (response) => {
+    apiFetch('/api/enquiries', { cache: 'no-store' }).then(async (response) => {
       const result = await response.json() as BuyerEnquiry[] | { error?: string };
       if (!response.ok || !Array.isArray(result)) throw new Error('error' in result ? result.error : 'Unable to load enquiries.');
       setEnquiries(result);

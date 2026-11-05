@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { Menu, ShoppingBasket, Sprout, X, LogOut } from 'lucide-react';
 import { useStore } from '@/lib/store';
+import { clearStoredToken } from '@/lib/apiFetch';
 
 type SessionUser = { id: string; name: string; role: 'buyer' | 'seller' | 'admin' };
 
@@ -46,6 +47,7 @@ export default function Navbar() {
       console.error('Unable to sign out.');
       return;
     }
+    clearStoredToken();
     setUser(null);
     window.dispatchEvent(new Event('agrimarket:auth'));
     setMenuOpen(false);

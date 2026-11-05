@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useStore } from '@/lib/store';
+import { apiFetch } from '@/lib/apiFetch';
 import { ShoppingBasket, Truck } from 'lucide-react';
 
 type OrderSummary = { id: string; status: string };
@@ -14,7 +15,7 @@ export default function BuyerDashboardPage() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    fetch('/api/orders', { cache: 'no-store' }).then(async (response) => {
+    apiFetch('/api/orders').then(async (response) => {
       const result = await response.json() as OrderSummary[] | { error?: string };
       if (!response.ok || !Array.isArray(result)) throw new Error('error' in result ? result.error : 'Unable to load your orders.');
       setOrders(result);

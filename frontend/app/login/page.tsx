@@ -94,9 +94,15 @@ function LoginFormContent() {
         }),
       });
 
-      const result = await response.json() as { user?: { role: string }; error?: string };
+      const result = await response.json() as { user?: { role: string }; token?: string; error?: string };
       if (!response.ok || !result.user) {
         throw new Error(result.error ?? 'Unable to sign in. Please try again.');
+      }
+
+      // Store the session token in localStorage so all fetch calls can include it
+      // as an Authorization header — this avoids cross-domain cookie issues on Vercel/Render
+      if (result.token) {
+        localStorage.setItem('agrimarket_token', result.token);
       }
 
       window.dispatchEvent(new Event('agrimarket:auth'));

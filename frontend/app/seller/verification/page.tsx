@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
+import { apiFetch } from '@/lib/apiFetch';
 import {
   ArrowLeft,
   BadgeCheck,
@@ -89,7 +90,7 @@ export default function SellerVerificationPage() {
 
   const loadProfile = async () => {
     try {
-      const response = await fetch('/api/seller/verification', { cache: 'no-store' });
+      const response = await apiFetch('/api/seller/verification', { cache: 'no-store' });
       const result = await response.json() as VerificationResponse & { error?: string };
       if (!response.ok) throw new Error(result.error ?? 'Unable to load seller verification.');
       setRecord(result);
@@ -111,7 +112,7 @@ export default function SellerVerificationPage() {
         setDocuments(docs);
       } else {
         // Also query dedicated documents endpoint
-        const docsRes = await fetch('/api/seller/verification/documents', { cache: 'no-store' });
+        const docsRes = await apiFetch('/api/seller/verification/documents', { cache: 'no-store' });
         if (docsRes.ok) {
           const docsData = await docsRes.json() as UploadedDoc[];
           if (Array.isArray(docsData)) setDocuments(docsData);
@@ -141,7 +142,7 @@ export default function SellerVerificationPage() {
       formData.append('type', selectedDocType);
       formData.append('name', docCustomName.trim() || `${selectedDocType} Document`);
 
-      const res = await fetch('/api/upload/verification-document', {
+      const res = await apiFetch('/api/upload/verification-document', {
         method: 'POST',
         body: formData,
       });
@@ -166,7 +167,7 @@ export default function SellerVerificationPage() {
     setError('');
     setNotice('');
     try {
-      const res = await fetch(`/api/seller/verification/documents/${docId}`, {
+      const res = await apiFetch(`/api/seller/verification/documents/${docId}`, {
         method: 'DELETE',
       });
       const data = await res.json() as { success?: boolean; documents?: UploadedDoc[]; error?: string };
@@ -186,7 +187,7 @@ export default function SellerVerificationPage() {
     setError('');
     setNotice('');
     try {
-      const response = await fetch('/api/seller/verification', {
+      const response = await apiFetch('/api/seller/verification', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

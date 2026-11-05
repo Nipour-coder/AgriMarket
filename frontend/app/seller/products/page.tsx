@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { MOCK_CATEGORIES, PROVINCES_LIST } from '@/data/mockData';
+import { apiFetch } from '@/lib/apiFetch';
 import { PackagePlus, Pencil, Trash2, UploadCloud, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 
 type SellerProduct = {
@@ -44,7 +45,7 @@ export default function SellerProductsPage() {
 
   const loadProducts = useCallback(async () => {
     try {
-      const response = await fetch('/api/seller/products', { cache: 'no-store' });
+      const response = await apiFetch('/api/seller/products', { cache: 'no-store' });
       const result = await response.json() as SellerProduct[] | { error?: string };
       if (!response.ok || !Array.isArray(result)) throw new Error('error' in result ? result.error : 'Unable to load your products.');
       setProducts(result);
@@ -68,7 +69,7 @@ export default function SellerProductsPage() {
       const data = new FormData();
       data.append('image', file);
 
-      const response = await fetch('/api/upload/product-image', {
+      const response = await apiFetch('/api/upload/product-image', {
         method: 'POST',
         body: data,
       });
@@ -98,7 +99,7 @@ export default function SellerProductsPage() {
     setError('');
     setNotice('');
     try {
-      const response = await fetch(editing ? `/api/products/${editing}` : '/api/products', {
+      const response = await apiFetch(editing ? `/api/products/${editing}` : '/api/products', {
         method: editing ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -134,7 +135,7 @@ export default function SellerProductsPage() {
   const archive = async (product: SellerProduct) => {
     setError('');
     try {
-      const response = await fetch(`/api/products/${product.id}`, { method: 'DELETE' });
+      const response = await apiFetch(`/api/products/${product.id}`, { method: 'DELETE' });
       const result = await response.json() as { error?: string };
       if (!response.ok) throw new Error(result.error ?? 'Unable to archive product.');
       await loadProducts();

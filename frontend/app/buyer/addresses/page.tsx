@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { apiFetch } from '@/lib/apiFetch';
 
 type SavedAddress = {
   id: string;
@@ -22,7 +23,7 @@ export default function BuyerAddressesPage() {
   const [error, setError] = useState('');
   const loadAddresses = useCallback(async () => {
     try {
-      const response = await fetch('/api/addresses', { cache: 'no-store' });
+      const response = await apiFetch('/api/addresses', { cache: 'no-store' });
       const result = await response.json() as SavedAddress[] | { error?: string };
       if (!response.ok || !Array.isArray(result)) throw new Error('error' in result ? result.error : 'Unable to load saved addresses.');
       setAddresses(result);
@@ -38,7 +39,7 @@ export default function BuyerAddressesPage() {
 
   const remove = async (id: string) => {
     try {
-      const response = await fetch(`/api/addresses/${id}`, { method: 'DELETE' });
+      const response = await apiFetch(`/api/addresses/${id}`, { method: 'DELETE' });
       const result = await response.json() as { error?: string };
       if (!response.ok) throw new Error(result.error ?? 'Unable to remove address.');
       await loadAddresses();

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
+import { apiFetch } from '@/lib/apiFetch';
 
 type Order = {
   id: string;
@@ -20,7 +21,7 @@ export default function SellerOrdersPage() {
 
   const loadOrders = useCallback(async () => {
     try {
-      const response = await fetch('/api/orders', { cache: 'no-store' });
+      const response = await apiFetch('/api/orders', { cache: 'no-store' });
       const result = await response.json() as Order[] | { error?: string };
       if (!response.ok || !Array.isArray(result)) throw new Error('error' in result ? result.error : 'Unable to load seller orders.');
       setOrders(result);
@@ -38,7 +39,7 @@ export default function SellerOrdersPage() {
     setSaving(order.id);
     setError('');
     try {
-      const response = await fetch(`/api/orders/${encodeURIComponent(order.id)}`, {
+      const response = await apiFetch(`/api/orders/${encodeURIComponent(order.id)}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),

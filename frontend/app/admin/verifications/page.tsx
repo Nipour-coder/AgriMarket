@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
+import { apiFetch } from '@/lib/apiFetch';
 import { 
   ArrowLeft, 
   Building2, 
@@ -51,7 +52,7 @@ export default function AdminVerificationsPage() {
   // Load verification queue
   const loadQueue = useCallback(async () => {
     try {
-      const response = await fetch('/api/admin/verifications', { cache: 'no-store' });
+      const response = await apiFetch('/api/admin/verifications', { cache: 'no-store' });
       const result = await response.json() as SellerApplication[] | { error?: string };
       if (!response.ok || !Array.isArray(result)) {
         throw new Error('error' in result ? result.error : 'Unable to load seller applications.');
@@ -85,7 +86,7 @@ export default function AdminVerificationsPage() {
     setNotice('');
 
     try {
-      const response = await fetch(`/api/admin/verifications/${application.userId}`, {
+      const response = await apiFetch(`/api/admin/verifications/${application.userId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status, reason: reason || null }),

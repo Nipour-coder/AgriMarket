@@ -10,6 +10,12 @@ export const notificationsRouter = Router();
 notificationsRouter.get('/', async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const user = await requireUser(req);
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user.id);
+    if (!isUuid) {
+      res.json([]);
+      return;
+    }
+
     const records = await getDb().select().from(notifications)
       .where(eq(notifications.userId, user.id))
       .orderBy(desc(notifications.createdAt))

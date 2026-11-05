@@ -101,24 +101,24 @@ authRouter.post('/login', async (req: Request, res: Response, next: NextFunction
     const isSeller = role === 'seller' || emailLower.includes('seller') || emailLower.includes('farmer') || emailLower.includes('valley');
 
     let demoUser = {
-      id: 'buyer-1',
+      id: 'e25742f6-d4ba-4de4-8ec5-bc4bc5ed283d',
       name: 'Commercial Wholesale Buyer',
-      email: emailLower || 'buyer@agrimarket.co.za',
+      email: emailLower || 'buyer@freshmark.co.za',
       role: 'buyer',
     };
 
     if (isAdmin) {
       demoUser = {
-        id: 'admin-1',
+        id: '24e208b2-385d-4884-a904-7e3316103084',
         name: 'AgriMarket Administrator',
         email: emailLower || 'admin@agrimarket.co.za',
         role: 'admin',
       };
     } else if (isSeller) {
       demoUser = {
-        id: 'seller-1',
+        id: '396e8a20-120b-48c7-8090-26f816d414a5',
         name: 'Valley Green Agri Cooperative',
-        email: emailLower || 'seller@agrimarket.co.za',
+        email: emailLower || 'seller@valleygreen.co.za',
         role: 'seller',
       };
     }

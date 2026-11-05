@@ -72,6 +72,12 @@ const sellerCategories = new Set([
 disputesRouter.get('/', requireRoleMiddleware('buyer', 'seller'), async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
     const user = req.user!;
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user.id);
+    if (!isUuid) {
+      res.json([]);
+      return;
+    }
+
     const rows = await getDb().select({
       dispute: disputes,
       orderDisplayId: orders.displayId,

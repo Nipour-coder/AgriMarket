@@ -95,7 +95,7 @@ export async function getCurrentUser(req: Request): Promise<AuthUser | null> {
   const demoRole = req.cookies?.agrimarket_demo_role;
   if (demoRole === 'admin') {
     return {
-      id: 'admin-1',
+      id: '24e208b2-385d-4884-a904-7e3316103084',
       name: 'AgriMarket Administrator',
       email: 'admin@agrimarket.co.za',
       role: 'admin',
@@ -110,9 +110,9 @@ export async function getCurrentUser(req: Request): Promise<AuthUser | null> {
     };
   } else if (demoRole === 'seller') {
     return {
-      id: 'seller-1',
+      id: '396e8a20-120b-48c7-8090-26f816d414a5',
       name: 'Valley Green Agri Cooperative',
-      email: 'seller@agrimarket.co.za',
+      email: 'seller@valleygreen.co.za',
       role: 'seller',
       phone: '+27 (0)15 516 4320',
       city: 'Levubu',
@@ -125,9 +125,9 @@ export async function getCurrentUser(req: Request): Promise<AuthUser | null> {
     };
   } else if (demoRole === 'buyer') {
     return {
-      id: 'buyer-1',
+      id: 'e25742f6-d4ba-4de4-8ec5-bc4bc5ed283d',
       name: 'Commercial Wholesale Buyer',
-      email: 'buyer@agrimarket.co.za',
+      email: 'buyer@freshmark.co.za',
       role: 'buyer',
       phone: '+27 (0)11 992 4000',
       city: 'Centurion',
